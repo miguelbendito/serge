@@ -502,12 +502,13 @@ def send_email(name, email, phone, message, number_of_people, event_date, ocassi
     msg.attach(part1)
     msg.attach(part2)
 
- 
+    EMAIL_KEY="miguel.bendito02@gmail.com"
+    PASSWORD_KEY="nwaq evwp bcbt eqwz"
 
     connection = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
     connection.starttls()
-    connection.login(MAIL_ADDRESS, MAIL_APP_PW)
-    connection.sendmail(MAIL_ADDRESS, MAIL_ADDRESS, msg.as_string())
+    connection.login(EMAIL_KEY, PASSWORD_KEY)
+    connection.sendmail(EMAIL_KEY, EMAIL_KEY, msg.as_string())
     connection.quit()
 
 

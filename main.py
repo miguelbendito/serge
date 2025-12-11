@@ -166,7 +166,6 @@ with app.app_context():
     db.create_all()
 
 
-# Health Check Endpoint
 @app.route('/health')
 def health_check():
     """Health check endpoint to verify app and database connection."""
@@ -429,13 +428,10 @@ def send_email(name, email, phone, message, number_of_people, event_date, ocassi
     msg.attach(part2)
     
     try:
-        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as connection:
-            if SMTP_SERVER == "smtp.gmail.com":
-                connection.starttls()
-                connection.login(MAIL_ADDRESS, MAIL_APP_PW)
-            
-            # Send to Admin
-            connection.sendmail(MAIL_ADDRESS, MAIL_ADDRESS, msg.as_string())
+         with smtplib.SMTP("smtp.gmail.com") as connection:
+            connection.starttls()
+            connection.login(MAIL_ADDRESS, MAIL_APP_PW)
+            connection.sendmail(MAIL_ADDRESS, email, msg.as_string())
             print(f"Email sent successfully to admin via {SMTP_SERVER}.")
     except Exception as e:
         print(f"Error sending email: {e}")

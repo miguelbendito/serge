@@ -194,39 +194,70 @@ def health_check():
 
 @app.route('/test_email', methods=["GET", "POST"])
 def test_email():
+    from flask import jsonify
+    
     MAIL_ADDRESS = 'joheandroid@gmail.com'
     MAIL_APP_PW = 'nwaq evwp bcbt eqwz'
-    menus_str = "None"
-    html_content = render_template("email_inquiry.html", 
-                                   name="Test",
-                                   email="test@example.com", 
-                                   phone="123-456-7890", 
-                                   message="This is a test email.",
-                                   number_of_people=5,
-                                   event_date="2025-12-11",
-                                   occasion="Birthday",
-                                   allergies="None",
-                                   menus=menus_str,
-                                   year=datetime.now().year)
- 
-    msg = MIMEMultipart("alternative")
-    msg["Subject"] = f"New Inquiry: {name} - {event_date}"
-    msg["From"] = MAIL_ADDRESS
-    msg["To"] = MAIL_ADDRESS 
-    msg["Reply-To"] = "test@example.com"
+    SMTP_SERVER = 'smtp.gmail.com'
+    SMTP_PORT = 587
+    
+    # Test data
+    name = "Test User"
+    email = "test@example.com"
+    phone = "123-456-7890"
+    message = "This is a test email."
+    number_of_people = 5
+    event_date = "2025-12-11"
+    occasion = "Birthday"
+    allergies = "None"
+    menus_str = "Summer Garden Party, Mediterranean Feast"
+    
+    try:
+        html_content = render_template("email_inquiry.html", 
+                                       name=name,
+                                       email=email, 
+                                       phone=phone, 
+                                       message=message,
+                                       number_of_people=number_of_people,
+                                       event_date=event_date,
+                                       occasion=occasion,
+                                       allergies=allergies,
+                                       menus=menus_str,
+                                       year=datetime.now().year)
+     
+        msg = MIMEMultipart("alternative")
+        msg["Subject"] = f"New Inquiry: {name} - {event_date}"
+        msg["From"] = MAIL_ADDRESS
+        msg["To"] = MAIL_ADDRESS 
+        msg["Reply-To"] = email
 
-    text_content = f"New inquiry from {name}.\n\nDate: {event_date}\nDetails:\nEmail: {email}\nPhone: {phone}\nGuests: {number_of_people}\nOccasion: {ocassion}\nMenus: {menus_str}\n\nMessage:\n{message}"
-    
-    part1 = MIMEText(text_content, "plain")
-    part2 = MIMEText(html_content, "html")
-    
-    msg.attach(part1)
-    msg.attach(part2)
-    
-    connection.starttls()
-    connection.login(MAIL_ADDRESS, MAIL_APP_PW)
-    connection.sendmail(MAIL_ADDRESS, MAIL_ADDRESS, msg.as_string())
-
+        text_content = f"New inquiry from {name}.\n\nDate: {event_date}\nDetails:\nEmail: {email}\nPhone: {phone}\nGuests: {number_of_people}\nOccasion: {occasion}\nMenus: {menus_str}\n\nMessage:\n{message}"
+        
+        part1 = MIMEText(text_content, "plain")
+        part2 = MIMEText(html_content, "html")
+        
+        msg.attach(part1)
+        msg.attach(part2)
+        
+        # Create SMTP connection
+        connection = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+        connection.starttls()
+        connection.login(MAIL_ADDRESS, MAIL_APP_PW)
+        connection.sendmail(MAIL_ADDRESS, MAIL_ADDRESS, msg.as_string())
+        connection.quit()
+        
+        return jsonify({
+            "status": "success",
+            "message": "Test email sent successfully!",
+            "sent_to": MAIL_ADDRESS
+        }), 200
+        
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e),
+            "type": type(e).__name__
+        }), 500
 
 
 def admin_only(f):

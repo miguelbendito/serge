@@ -192,7 +192,7 @@ def health_check():
     return jsonify(health_status), 200
 
 
-@app.route('/test_email', methods=["GET", "POST"])
+@app.route('/test-email', methods=["GET", "POST"])
 def test_email():
     from flask import jsonify
     

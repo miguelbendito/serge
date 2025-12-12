@@ -243,7 +243,9 @@ def test_email():
         connection = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
         connection.starttls()
         connection.login(MAIL_ADDRESS, MAIL_APP_PW)
+        print("email sending")
         connection.sendmail(MAIL_ADDRESS, MAIL_ADDRESS, msg.as_string())
+        print("email sent")
         connection.quit()
         
         return jsonify({

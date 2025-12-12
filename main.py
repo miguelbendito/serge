@@ -240,7 +240,7 @@ def test_email():
         msg.attach(part2)
         
       
-        connection = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+        connection = smtplib.SMTP(SMTP_SERVER, SMTP_PORT,timeout=10)
         connection.starttls()
         connection.login(MAIL_ADDRESS, MAIL_APP_PW)
         print("email sending")
@@ -507,7 +507,7 @@ def send_email(name, email, phone, message, number_of_people, event_date, ocassi
     EMAIL_KEY="miguel.bendito02@gmail.com"
     PASSWORD_KEY= os.environ.get('EMAIL_SECRET_KEY')
 
-    connection = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+    connection = smtplib.SMTP(SMTP_SERVER, SMTP_PORT,timeout=10)
     connection.starttls()
     connection.login(EMAIL_KEY, PASSWORD_KEY)
     connection.sendmail(EMAIL_KEY, EMAIL_KEY, msg.as_string())

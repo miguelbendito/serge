@@ -1,6 +1,7 @@
 from datetime import date, datetime
 import os
 import smtplib
+import requests
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from flask import Flask, abort, render_template, redirect, url_for, flash, request
@@ -191,77 +192,6 @@ def health_check():
     
     return jsonify(health_status), 200
 
-
-@app.route('/test-email', methods=["GET", "POST"])
-def test_email():
-    from flask import jsonify
-    
-    MAIL_ADDRESS = 'joheandroid@gmail.com'
-    MAIL_APP_PW = 'uzvi mify rerw gaie'
-    SMTP_SERVER = 'smtp.gmail.com'
-    SMTP_PORT = 587
-    
-   
-    name = "Test User"
-    email = "test@example.com"
-    phone = "123-456-7890"
-    message = "This is a test email."
-    number_of_people = 5
-    event_date = "2025-12-11"
-    occasion = "Birthday"
-    allergies = "None"
-    menus_str = "Summer Garden Party, Mediterranean Feast"
-    
-    try:
-        html_content = render_template("email_inquiry.html", 
-                                       name=name,
-                                       email=email, 
-                                       phone=phone, 
-                                       message=message,
-                                       number_of_people=number_of_people,
-                                       event_date=event_date,
-                                       occasion=occasion,
-                                       allergies=allergies,
-                                       menus=menus_str,
-                                       year=datetime.now().year)
-     
-        msg = MIMEMultipart("alternative")
-        msg["Subject"] = f"New Inquiry: {name} - {event_date}"
-        msg["From"] = MAIL_ADDRESS
-        msg["To"] = MAIL_ADDRESS 
-        msg["Reply-To"] = email
-
-        text_content = f"New inquiry from {name}.\n\nDate: {event_date}\nDetails:\nEmail: {email}\nPhone: {phone}\nGuests: {number_of_people}\nOccasion: {occasion}\nMenus: {menus_str}\n\nMessage:\n{message}"
-        
-        part1 = MIMEText(text_content, "plain")
-        part2 = MIMEText(html_content, "html")
-        
-        msg.attach(part1)
-        msg.attach(part2)
-        
-      
-        connection = smtplib.SMTP(SMTP_SERVER, SMTP_PORT,timeout=10)
-        connection.starttls()
-        connection.login(MAIL_ADDRESS, MAIL_APP_PW)
-        print("email sending")
-        connection.sendmail(MAIL_ADDRESS, MAIL_ADDRESS, msg.as_string())
-        print("email sent")
-        connection.quit()
-        
-        return jsonify({
-            "status": "success",
-            "message": "Test email sent successfully!",
-            "sent_to": MAIL_ADDRESS
-        }), 200
-        
-    except Exception as e:
-        return jsonify({
-            "status": "error",
-            "message": str(e),
-            "type": type(e).__name__
-        }), 500
-
-
 def admin_only(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -418,22 +348,6 @@ def about():
     return render_template("about.html", current_user=current_user)
 
 
-# @app.route("/contact", methods=["GET", "POST"])
-# def contact():
-#     return render_template("contact.html", current_user=current_user)
-
-# Optional: You can include the email sending code from Day 60:
-# DON'T put your email and password here directly! The code will be visible when you upload to Github.
-# Use environment variables instead (Day 35)
-
-#MAIL_ADDRESS = os.environ.get("EMAIL_KEY")
-# Email Configuration
-MAIL_APP_PW = os.environ.get("MAIL_APP_PW")
-MAIL_ADDRESS = os.environ.get("MAIL_ADDRESS", "admin@example.com")
-MAIL_APP_PW =  os.environ.get("MAIL_APP_PW", "")
-SMTP_SERVER = os.environ.get("SMTP_SERVER", "localhost")
-SMTP_PORT = int(os.environ.get("SMTP_PORT", 1025))
-
 @app.route("/contact", methods=["GET", "POST"])
 def contact():
     
@@ -464,54 +378,55 @@ def contact():
         db.session.commit()
 
         
-        
-        send_email(data["name"], data["email"], data["phone"], data["message"], number_of_people, event_date,data["ocassion"],data["allergies"], selected_menus)
+        try:
+            send_email(data["name"], data["email"], data["phone"], data["message"], number_of_people, event_date,data["ocassion"],data["allergies"], selected_menus)
+        except Exception as e:
+            print("RESEND FAILED:", e)
+            flash("We received your message, but email delivery failed.")
         return render_template("contact.html", msg_sent=True, menus=all_menus, current_user=current_user)
     return render_template("contact.html", msg_sent=False, menus=all_menus, current_user=current_user)
 
 
-def send_email(name, email, phone, message, number_of_people, event_date, ocassion, allergies, menus_interested):
-   
-    SMTP_SERVER = 'smtp.gmail.com'
-    SMTP_PORT = 587
-    
+def send_email(name, email, phone, message, number_of_people, event_date, occasion, allergies, menus_interested):
+    api_key = os.environ.get("RESEND_API_KEY")
+    to_email = "sergeristivojevic@gmail.com"
+    from_email = os.environ.get("CONTACT_FROM_EMAIL", "onboarding@resend.dev")
+
+    if not api_key or not to_email:
+        raise RuntimeError("Missing RESEND_API_KEY or CONTACT_TO_EMAIL env vars")
+
     menus_str = ", ".join(menus_interested) if menus_interested else "None"
-    
 
-    html_content = render_template("email_inquiry.html", 
-                                   name=name,
-                                   email=email, 
-                                   phone=phone, 
-                                   message=message,
-                                   number_of_people=number_of_people,
-                                   event_date=event_date,
-                                   occasion=ocassion,
-                                   allergies=allergies,
-                                   menus=menus_str,
-                                   year=datetime.now().year)
- 
-    msg = MIMEMultipart("alternative")
-    msg["Subject"] = f"New Inquiry: {name} - {event_date}"
-    msg["From"] = MAIL_ADDRESS
-    msg["To"] = MAIL_ADDRESS 
-    msg["Reply-To"] = email
+    html_content = render_template(
+        "email_inquiry.html",
+        name=name, email=email, phone=phone, message=message,
+        number_of_people=number_of_people, event_date=event_date,
+        occasion=occasion, allergies=allergies, menus=menus_str,
+        year=datetime.now().year
+    )
 
-    text_content = f"New inquiry from {name}.\n\nDate: {event_date}\nDetails:\nEmail: {email}\nPhone: {phone}\nGuests: {number_of_people}\nOccasion: {ocassion}\nMenus: {menus_str}\n\nMessage:\n{message}"
-    
-    part1 = MIMEText(text_content, "plain")
-    part2 = MIMEText(html_content, "html")
-    
-    msg.attach(part1)
-    msg.attach(part2)
+    text_content = (
+        f"New inquiry from {name}\n\n"
+        f"Email: {email}\nPhone: {phone}\n"
+        f"Guests: {number_of_people}\nDate: {event_date}\n"
+        f"Occasion: {occasion}\nAllergies: {allergies}\n"
+        f"Menus: {menus_str}\n\nMessage:\n{message}"
+    )
 
-    EMAIL_KEY="miguel.bendito02@gmail.com"
-    PASSWORD_KEY= os.environ.get('EMAIL_SECRET_KEY')
-
-    connection = smtplib.SMTP(SMTP_SERVER, SMTP_PORT,timeout=10)
-    connection.starttls()
-    connection.login(EMAIL_KEY, PASSWORD_KEY)
-    connection.sendmail(EMAIL_KEY, EMAIL_KEY, msg.as_string())
-    connection.quit()
+    r = requests.post(
+        "https://api.resend.com/emails",
+        headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
+        json={
+            "from": from_email,
+            "to": [to_email],
+            "subject": f"New Inquiry: {name} - {event_date}",
+            "reply_to": email,
+            "text": text_content,
+            "html": html_content,
+        },
+        timeout=10,
+    )
+    r.raise_for_status()
 
 
 # -------------------- CONTACT MESSAGES ADMIN --------------------

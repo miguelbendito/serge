@@ -33,7 +33,7 @@ This will install the packages from the requirements.txt for this project.
 
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = FLASK_SECRET_KEY
+app.config['SECRET_KEY'] = os.environ.get('FLASK_SECRET_KEY')
 ckeditor = CKEditor(app)
 Bootstrap5(app)
 
@@ -503,7 +503,7 @@ def send_email(name, email, phone, message, number_of_people, event_date, ocassi
     msg.attach(part2)
 
     EMAIL_KEY="miguel.bendito02@gmail.com"
-    PASSWORD_KEY= EMAIL_SECRET_KEY
+    PASSWORD_KEY= os.environ.get('EMAIL_SECRET_KEY')
 
     connection = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
     connection.starttls()

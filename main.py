@@ -389,7 +389,7 @@ def contact():
 
 def send_email(name, email, phone, message, number_of_people, event_date, occasion, allergies, menus_interested):
     api_key = os.environ.get("RESEND_API_KEY")
-    to_email = "sergeristivojevic@gmail.com"
+    to_email = os.environ.get("CONTACT_TO_EMAIL")
     from_email = os.environ.get("CONTACT_FROM_EMAIL", "onboarding@resend.dev")
 
     if not api_key or not to_email:

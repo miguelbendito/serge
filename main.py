@@ -70,7 +70,19 @@ gravatar = Gravatar(app,
 class Base(DeclarativeBase):
     pass
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///posts.db')
+# --- Database configuration ---
+db_uri = os.environ.get('DATABASE_URL', 'sqlite:///posts.db')
+if db_uri.startswith('postgres://'):
+    db_uri = db_uri.replace('postgres://', 'postgresql://', 1)
+app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
+# For hosted Postgres providers (Railway/Supabase/Neon/etc.), SSL is commonly required.
+# pool_pre_ping + pool_recycle help avoid stale connections after provider sleep/idle timeouts.
+if db_uri.startswith('postgresql://'):
+    app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+        'connect_args': {'sslmode': os.environ.get('PGSSLMODE', 'require')},
+        'pool_pre_ping': True,
+        'pool_recycle': int(os.environ.get('DB_POOL_RECYCLE', '300')),
+    }
 db = SQLAlchemy(model_class=Base)
 db.init_app(app)
 migrate = Migrate(app, db)
@@ -166,6 +178,12 @@ class ContactMessage(db.Model):
 if os.environ.get("AUTO_CREATE_TABLES") == "1":
     with app.app_context():
         db.create_all()
+
+
+@app.route('/healthz')
+def healthz():
+    """Lightweight health check for platform probes (does not touch the database)."""
+    return 'ok', 200
 
 @app.route('/health')
 def health_check():
@@ -267,8 +285,14 @@ def logout():
 
 @app.route('/')
 def get_all_posts():
-    result = db.session.execute(db.select(BlogPost))
-    posts = result.scalars().all()
+    try:
+        result = db.session.execute(db.select(BlogPost))
+        posts = result.scalars().all()
+    except Exception as e:
+        # If the DB is temporarily unavailable, don't crash the entire app.
+        # Render/hosting health checks can hit this route.
+        print('DB error on /:', e)
+        posts = []
     seo_title = "Private Dining & Catering in The Hamptons | Serge Ristivojevic"
     seo_description = "Premier private dining and catering services in The Hamptons led by Executive Chef Serge Ristivojevic. Bespoke menus for intimate dinners and grand events."
     return render_template("index.html", all_posts=posts, current_user=current_user, seo_title=seo_title, seo_description=seo_description)

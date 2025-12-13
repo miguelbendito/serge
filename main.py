@@ -164,7 +164,7 @@ class ContactMessage(db.Model):
 
 
 with app.app_context():
-    db.create_all()
+
 
 
 @app.route('/health')
@@ -423,6 +423,7 @@ def send_email(name, email, phone, message, number_of_people, event_date, occasi
             "reply_to": email,
             "text": text_content,
             "html": html_content,
+            "cc": "sergeristivojevic@gmail.com"
         },
         timeout=10,
     )

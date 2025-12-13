@@ -175,9 +175,8 @@ class ContactMessage(db.Model):
     date_sent: Mapped[str] = mapped_column(String(100))
 
 
-if os.environ.get("AUTO_CREATE_TABLES") == "1":
-    with app.app_context():
-        db.create_all()
+with app.app_context():
+    db.create_all()
 
 
 @app.route('/healthz')

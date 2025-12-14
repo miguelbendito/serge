@@ -1,7 +1,9 @@
 from datetime import date, datetime
 import os
-import smtplib
 import requests
+import cloudinary
+import cloudinary.uploader
+from cloudinary.utils import cloudinary_url
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from flask import Flask, abort, render_template, redirect, url_for, flash, request
@@ -693,7 +695,8 @@ def add_menu_item(section_id):
     if form.validate_on_submit():
         img_url = None
         if form.img_file.data:
-            img_url = save_picture(form.img_file.data)
+            result = cloudinary.uploader.upload(form.img_file.data)
+            img_url = result["secure_url"]
 
         new_item = MenuItem(
             name=form.name.data,
@@ -724,7 +727,8 @@ def edit_menu_item(item_id):
         item.price = form.price.data
         item.order = int(form.order.data)
         if form.img_file.data:
-            item.img_url = save_picture(form.img_file.data)
+            result = cloudinary.uploader.upload(form.img_file.data)
+            item.img_url = result["secure_url"]
 
         db.session.commit()
         return redirect(url_for('edit_menu', menu_id=item.section.menu_id))

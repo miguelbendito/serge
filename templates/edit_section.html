@@ -1,0 +1,37 @@
+{% extends "dashboard_layout.html" %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto">
+    <div class="card bg-base-100 shadow-xl">
+        <div class="card-body">
+            <h2 class="card-title text-2xl mb-4 text-center">{{ title }}</h2>
+
+            <form method="POST" action="">
+                {{ form.hidden_tag() }}
+
+                <div class="form-control w-full mb-4">
+                    <label class="label"><span class="label-text font-bold">Category Title</span></label>
+                    {{ form.title(class="input input-bordered w-full") }}
+                </div>
+
+                <div class="form-control w-full mb-4">
+                    <label class="label"><span class="label-text font-bold">Subtitle (Optional)</span></label>
+                    {{ form.subtitle(class="input input-bordered w-full") }}
+                </div>
+
+                <div class="form-control w-full mb-6">
+                    <label class="label"><span class="label-text font-bold">Order (Numeric)</span></label>
+                    {{ form.order(class="input input-bordered w-full") }}
+                    <label class="label"><span class="label-text-alt text-base-content/60">Controls the display
+                            order.</span></label>
+                </div>
+
+                <div class="card-actions justify-end">
+                    <a href="{{ url_for('edit_menu', menu_id=menu.id) }}" class="btn btn-ghost">Cancel</a>
+                    {{ form.submit(class="btn btn-primary") }}
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

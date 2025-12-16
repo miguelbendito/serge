@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background-color: #f6f6f6;
+            margin: 0;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+            margin-top: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        .logo {
+            font-family: 'Times New Roman', serif;
+            font-size: 32px;
+            font-weight: bold;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: #B58C67;
+            /* Gold/Brown accent color */
+        }
+
+        .content {
+            padding: 30px 20px;
+            color: #444444;
+            line-height: 1.6;
+        }
+
+        .content h2 {
+            color: #333;
+            margin-top: 0;
+        }
+
+        .field {
+            margin-bottom: 15px;
+        }
+
+        .field-label {
+            font-weight: bold;
+            color: #555;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .field-value {
+            color: #333;
+            background: #f9f9f9;
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: 1px solid #eee;
+        }
+
+        .message-box {
+            background-color: #fdfdfd;
+            border-left: 4px solid #B58C67;
+            padding: 15px;
+            font-style: italic;
+            margin-top: 20px;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+            padding-top: 20px;
+            border-top: 1px solid #eeeeee;
+            margin-top: 20px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            background-color: #eee;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-right: 5px;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <span>SR</span> Serge
+            </div>
+            <p style="margin: 5px 0 0; color: #888; font-size: 14px;">Private Dining in The Hamptons</p>
+        </div>
+
+        <div class="content">
+            <h2>New Inquiry Received</h2>
+            <p>You have received a new message via the contact form.</p>
+
+            <div class="field">
+                <span class="field-label">Name</span>
+                <div class="field-value">{{ name }}</div>
+            </div>
+
+            <div class="field">
+                <span class="field-label">Email</span>
+                <div class="field-value"><a href="mailto:{{ email }}">{{ email }}</a></div>
+            </div>
+
+            <div class="field">
+                <span class="field-label">Phone</span>
+                <div class="field-value">{{ phone }}</div>
+            </div>
+
+            <div class="row" style="display: flex; gap: 15px;">
+                <div class="field" style="flex: 1;">
+                    <span class="field-label">Event Date</span>
+                    <div class="field-value">{{ event_date }}</div>
+                </div>
+                <div class="field" style="flex: 1;">
+                    <span class="field-label">Guests</span>
+                    <div class="field-value">{{ number_of_people }}</div>
+                </div>
+            </div>
+
+            <div class="field">
+                <span class="field-label">Occasion</span>
+                <div class="field-value">{{ occasion }}</div>
+            </div>
+
+            {% if allergies %}
+            <div class="field">
+                <span class="field-label" style="color: #d9534f;">Allergies / Restrictions</span>
+                <div class="field-value" style="border-color: #f8l4l4; background-color: #fff5f5;">{{ allergies }}</div>
+            </div>
+            {% endif %}
+
+            <div class="field">
+                <span class="field-label">Interested in Menus</span>
+                <div>
+                    {% if menus and menus != 'None' %}
+                    {% for menu in menus.split(',') %}
+                    <span class="badge">{{ menu.strip() }}</span>
+                    {% endfor %}
+                    {% else %}
+                    <span style="color: #999; font-style: italic;">No specific menu selected</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="field">
+                <span class="field-label">Message</span>
+                <div class="message-box">
+                    "{{ message }}"
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            &copy; {{ year }} Serge Private Dining. All rights reserved.<br>
+            This email was sent from your website contact form.
+        </div>
+    </div>
+</body>
+
+</html>

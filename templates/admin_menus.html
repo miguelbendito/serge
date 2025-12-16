@@ -1,0 +1,128 @@
+{% extends "dashboard_layout.html" %} {% block content %} <div class="flex justify-between items-center mb-8">
+  <h1 class="text-3xl font-bold text-base-content">Menu Management</h1>
+  <a class="btn btn-primary" href="{{ url_for('add_new_menu') }}">
+    <i class="fas fa-plus"></i> Create New Menu </a>
+</div>
+<div class="flex justify-between items-center mb-6">
+  <h2 class="text-2xl font-bold text-primary">Manage Menus</h2>
+  <div class="join">
+    <button id="list-btn" class="btn btn-sm join-item btn-primary" onclick="showListView()">
+      <i class="fas fa-list"></i>
+    </button>
+    <button id="grid-btn" class="btn btn-sm join-item" onclick="showGridView()">
+      <i class="fas fa-th"></i>
+    </button>
+  </div>
+</div>
+<form id="list-filter" method="get" class="flex items-center gap-2">
+  <select name="sort" class="select select-sm select-bordered" onchange="this.form.submit()">
+    <option value="title_asc" {{ 'selected' if current_sort == 'title_asc' }}> Title (A–Z) </option>
+    <option value="title_desc" {{ 'selected' if current_sort == 'title_desc' }}> Title (Z–A) </option>
+    <option value="season_asc" {{ 'selected' if current_sort == 'season_asc' }}> Season (A–Z) </option>
+    <option value="season_desc" {{ 'selected' if current_sort == 'season_desc' }}> Season (Z–A) </option>
+    <option value="status" {{ 'selected' if current_sort == 'status' }}> Status </option>
+  </select>
+</form>
+<br>
+<div id="list-view">
+  <div class="card bg-base-100 shadow-xl">
+    <div class="overflow-x-auto">
+      <table class="table w-full">
+        <thead>
+          <tr class="bg-base-200 uppercase text-xs text-base-content/70">
+            <th class="pl-6">Menu</th>
+            <th>Season</th>
+            <th>Status</th>
+            <th class="text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody> {% for menu in menus %} <tr class="hover border-b">
+            <td class="pl-6 py-4">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-lg overflow-hidden">
+                  <img src="{{ menu.img_url }}" class="w-full h-full object-cover">
+                </div>
+                <div>
+                  <p class="font-semibold">{{ menu.title }}</p>
+                  <p class="text-xs text-gray-400">{{ menu.slug }}</p>
+                </div>
+              </div>
+            </td>
+            <!-- NEW SEASON COLUMN -->
+            <td> {% if menu.season %} <span class="badge badge-outline badge-primary">{{ menu.season }}</span> {% else %} <span class="text-gray-400 italic text-sm">—</span> {% endif %} </td>
+            <td>
+              <form method="POST" action="{{ url_for('toggle_menu_status', menu_id=menu.id) }}"> {% if menu.is_active %} <button class="badge badge-success badge-outline hover:cursor-pointer" title="Click to deactivate"> Active </button> {% else %} <button class="badge badge-error badge-outline hover:cursor-pointer" title="Click to activate"> Inactive </button> {% endif %} </form>
+            </td>
+            <td class="text-center">
+              <a href="{{ url_for('edit_menu', menu_id=menu.id) }}" class="btn btn-sm btn-ghost">
+                <i class="fas fa-edit"></i>
+              </a>
+              <a href="{{ url_for('delete_menu', menu_id=menu.id) }}" class="btn btn-sm btn-ghost text-error" onclick="return confirm('Delete this menu?');">
+                <i class="fas fa-trash"></i>
+              </a>
+            </td>
+          </tr> {% endfor %} </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div id="grid-view" class="hidden">
+  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"> {% for menu in menus %} <div class="card bg-base-100 shadow hover:shadow-lg transition">
+      <figure class="h-40">
+        <img src="{{ menu.img_url }}" class="w-full h-full object-cover">
+      </figure>
+      <div class="card-body p-4">
+        <h3 class="font-bold text-lg">{{ menu.title }}</h3>
+        <!-- SEASON BADGE --> {% if menu.season %} <span class="badge badge-outline badge-primary w-fit">{{ menu.season }}</span> {% endif %} {% if menu.is_active %} <span class="badge badge-success badge-outline badge-primary w-fit">Active</span> {% else %} <span class="badge badge-error badge-outline badge-primary w-fit">Inactive</span> {% endif %} <div class="card-actions justify-end mt-3">
+          <a href="{{ url_for('edit_menu', menu_id=menu.id) }}" class="btn btn-xs btn-primary"> Edit </a>
+        </div>
+      </div>
+    </div> {% endfor %} </div>
+</div>
+<style>
+  /* Ensure hover effect helps visibility */
+  .card:hover h2 {
+    opacity: 0.8;
+  }
+
+  .object-fit-cover {
+    object-fit: cover;
+  }
+
+  /* Smooth FadeInUp Animation */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 40px, 0);
+    }
+
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  .animate-menu-card {
+    opacity: 0;
+    /* Important: Start invisible */
+    animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  }
+</style>
+<script>
+  function showListView() {
+    document.getElementById('list-view').classList.remove('hidden');
+    document.getElementById('list-filter').classList.remove('hidden');
+    document.getElementById('grid-view').classList.add('hidden');
+    document.getElementById('list-btn').classList.add('btn-primary');
+    document.getElementById('grid-btn').classList.remove('btn-primary');
+  }
+
+  function showGridView() {
+    document.getElementById('grid-view').classList.remove('hidden');
+    document.getElementById('list-view').classList.add('hidden');
+    document.getElementById('list-filter').classList.add('hidden');
+    document.getElementById('grid-btn').classList.add('btn-primary');
+    document.getElementById('list-btn').classList.remove('btn-primary');
+  }
+</script> {% endblock %}

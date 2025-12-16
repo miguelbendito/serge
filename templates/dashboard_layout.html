@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="cupcake">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Serge Admin</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.4.19/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Nunito', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#10b981',
+                        secondary: '#34d399',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f8fafc;
+            /* Slate 50 */
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        .ck-editor__editable_inline {
+            min-height: 200px;
+        }
+    </style>
+</head>
+
+<body class="bg-base-200 text-base-content font-sans antialiased">
+
+    <div class="drawer lg:drawer-open">
+        <input id="my-drawer-2" type="checkbox" class="drawer-toggle" />
+        <div class="drawer-content flex flex-col">
+
+            <div class="w-full navbar bg-base-100 shadow-sm z-10 sticky top-0">
+                <div class="flex-none lg:hidden">
+                    <label for="my-drawer-2" aria-label="open sidebar" class="btn btn-square btn-ghost">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            class="inline-block w-6 h-6 stroke-current">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </label>
+                </div>
+                <div class="flex-1 px-2 mx-2">
+                    <span class="text-lg font-bold text-primary">Admin Dashboard</span>
+                </div>
+                <div class="flex-none hidden lg:block">
+                    <ul class="menu menu-horizontal">
+
+                        <li><a class="font-semibold">Welcome, {{ current_user.name }}</a></li>
+                    </ul>
+                </div>
+                <div class="flex-none lg:hidden">
+
+                </div>
+            </div>
+
+
+            <main class="p-6 bg-base-200 min-h-screen">
+                {% block content %}{% endblock %}
+            </main>
+
+        </div>
+        <div class="drawer-side z-20">
+            <label for="my-drawer-2" aria-label="close sidebar" class="drawer-overlay"></label>
+            <ul class="menu p-4 w-80 min-h-full bg-base-100 text-base-content shadow-xl">
+
+                <li class="mb-4">
+                    <a href="/"
+                        class="text-2xl font-bold bg-primary text-primary-content hover:bg-primary-focus justify-center py-4 rounded-xl">
+                        Serge<span class="opacity-70 text-sm align-top">Admin</span>
+                    </a>
+                </li>
+
+                <li class="menu-title text-xs font-bold text-gray-500 uppercase tracking-widest mt-4">Main Menu</li>
+                <li class="mb-2">
+                    <a href="{{ url_for('admin_menus') }}"
+                        class="{{ 'active' if request.endpoint == 'admin_menus' else '' }}">
+                        <i class="fas fa-utensils w-5"></i> Manage Menus
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('admin_messages') }}"
+                        class="{{ 'active' if request.endpoint == 'admin_messages' else '' }} flex justify-between items-center">
+                        <span><i class="fas fa-envelope-open-text w-5"></i> Inquiries</span>
+                        {% if unread_count > 0 %}
+                        <span class="badge badge-accent badge-sm font-bold">{{ unread_count }}</span>
+                        {% endif %}
+                    </a>
+                </li>
+                <!-- Add more items here later -->
+
+                <li class="menu-title text-xs font-bold text-gray-500 uppercase tracking-widest mt-4">System</li>
+                <li>
+                    <a href="{{ url_for('get_all_posts') }}" target="_blank">
+                        <i class="fas fa-external-link-alt w-5"></i> View Live Site
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('logout') }}" class="text-error hover:bg-error hover:text-error-content">
+                        <i class="fas fa-sign-out-alt w-5"></i> Logout
+                    </a>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+
+</body>
+
+</html>

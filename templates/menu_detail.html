@@ -1,0 +1,307 @@
+{% include "header.html" %}
+
+{% block content %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+
+
+    body {
+        background-color: #000 !important;
+        color: #fff;
+    }
+
+    .masthead {
+        background-color: #000;
+        margin-bottom: 0;
+    }
+
+    /* Section Headers */
+    .menu-section-title {
+        font-family: 'Kaushan Script', cursive;
+        color: #ff8888;
+        font-size: 3.5rem;
+        margin-bottom: 10px;
+        line-height: 1.2;
+    }
+
+    .menu-section-subtitle {
+        font-family: 'Lato', sans-serif;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 0.8rem;
+        color: #ffffff;
+        margin-bottom: 40px;
+        position: relative;
+        display: inline-block;
+        padding-bottom: 10px;
+    }
+
+    .menu-section-subtitle::after {
+        content: '';
+        display: block;
+        width: 40px;
+        height: 1px;
+        background-color: #ff8888;
+        /* Match the title color */
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    /* Items */
+    .menu-item-name {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.4rem;
+        font-weight: 400;
+        color: #fff;
+        margin-bottom: 0.5rem;
+    }
+
+    .menu-item-price {
+        color: #ff8888;
+        font-family: 'Playfair Display', serif;
+        font-style: italic;
+        font-size: 1.1rem;
+    }
+
+    .menu-item-desc {
+        color: #999;
+        font-family: 'Lato', sans-serif;
+        font-weight: 400;
+        font-size: 0.95rem;
+        line-height: 1.6;
+    }
+
+    /* The specific frame from the image */
+    .menu-frame-css {
+        border: 1px solid #333;
+        padding: 80px 60px;
+        position: relative;
+        border-radius: 0 100px 0 0;
+        /* Top right only */
+        background-color: #000;
+        margin: 40px 0;
+        box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Sticky Navigation Bar */
+    .sticky-nav-container {
+        border-bottom: 1px solid #333;
+        background-color: #000;
+        z-index: 1000;
+        padding: 15px 0;
+    }
+
+    .category-link {
+        color: #fff;
+        font-family: 'Lato', sans-serif;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-size: 0.85rem;
+        padding: 8px 16px;
+        text-decoration: none;
+        border: 1px solid transparent;
+        transition: all 0.3s;
+    }
+
+    .category-link:hover {
+        color: #ff8888;
+    }
+
+    .active-category {
+        color: #ff8888 !important;
+        border: 1px solid #ff8888 !important;
+    }
+
+    #mainNav {
+        display: none !important;
+    }
+</style>
+
+<header class="masthead"
+    style="background-image: url('{{ menu.img_url if menu.img_url else url_for('static', filename='assets/img/menus_bg.jpg') }}'); margin-bottom: 0;">
+    <!-- Optional: Add a back button since main nav is hidden -->
+    <div style="position: absolute; top: 20px; left: 20px; z-index: 10;">
+        <a href="{{ url_for('menus') }}" class="btn btn-outline-light btn-sm"><i class="fas fa-arrow-left"></i> Back to
+            Menus</a>
+    </div>
+    <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                <div class="page-heading">
+                    <h1>{{ menu.title }}</h1>
+                    <span class="subheading">{{ menu.subtitle }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+{% if not menu.is_active and current_user.is_authenticated and current_user.id == 1 %}
+<div class="bg-danger text-white text-center py-2 fw-bold" style="position: sticky; top: 0; z-index: 9999;">
+    <i class="fas fa-eye-slash me-2"></i> HIDDEN: This menu is not visible to the public. You are seeing it because you
+    are an Admin.
+</div>
+{% endif %}
+
+<article style="background-color: #000; min-height: 80vh; padding-top: 0;">
+    <div class="sticky-nav-container sticky-top text-center" id="categoryNav">
+        <div class="d-flex justify-content-center gap-3 flex-wrap container">
+            {% for section in menu.sections|sort(attribute='order') %}
+            <a href="#section-{{ section.id }}" class="category-link" data-target="section-{{ section.id }}">
+                {{ section.title }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="menu-frame-css">
+            <div style="position: relative; z-index: 1;">
+                {% for section in menu.sections|sort(attribute='order') %}
+                <div id="section-{{ section.id }}" class="menu-section-container mb-5 text-center"
+                    style="scroll-margin-top: 140px;">
+                    <h2 class="menu-section-title">
+                        {{ section.title }}
+                    </h2>
+                    {% if section.subtitle %}
+                    <div class="d-block">
+                        <span class="menu-section-subtitle">{{ section.subtitle }}</span>
+                    </div>
+                    {% endif %}
+
+                    <div class="row text-start mt-5 px-lg-4">
+                        {% for item in section.items|sort(attribute='order') %}
+                        <div class="col-lg-6 mb-5">
+                            <div class="d-flex justify-content-between align-items-baseline mb-2">
+                                <h4 class="menu-item-name">
+                                    {{ item.name }}
+                                </h4>
+                                {% if item.price %}
+                                <span class="menu-item-price">{{ item.price }}</span>
+                                {% endif %}
+                            </div>
+                            <div class="menu-item-desc pr-lg-3">
+                                {{ item.description|safe }}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                {% if not loop.last %}
+                <div class="mb-5"></div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+
+        <div id="menusCarousel" class="carousel slide text-center mt-5 mb-5" data-bs-ride="carousel"
+            data-bs-interval="5000">
+            <h3 style="font-family: 'Kaushan Script', cursive; color: #B58C67; font-size: 2.5rem; margin-bottom: 2rem;">
+                Explore Our Menus</h3>
+
+            <div class="carousel-inner" style="min-height: 200px;">
+                {% for batch in all_menus|batch(3) %}
+                {% set is_active = loop.first %}
+                <div class="carousel-item {% if is_active %}active{% endif %}">
+                    <div class="row justify-content-center align-items-stretch gx-4">
+                        {% for menu_item in batch %}
+                        <div class="col-4 mb-4">
+                            <div class="d-flex flex-column align-items-center justify-content-between h-100 px-2 text-center"
+                                style="min-height: 350px;">
+
+                                <a href="{{ url_for('menu_detail', slug=menu_item.slug) }}"
+                                    class="d-block mb-3 w-100 overflow-hidden position-relative"
+                                    style="border-radius: 4px; padding-top: 75%;">
+                                    <img src="{{ menu_item.img_url or url_for('static', filename='assets/img/menus_bg.jpg') }}"
+                                        alt="{{ menu_item.title }}" class="position-absolute top-0 start-0 w-100 h-100"
+                                        style="object-fit: cover; transition: transform 0.5s ease;"
+                                        onmouseover="this.style.transform='scale(1.05)'"
+                                        onmouseout="this.style.transform='scale(1)'">
+                                </a>
+
+                                <div class="flex-grow-1 d-flex flex-column align-items-center">
+                                    <h4
+                                        style="font-family: 'Playfair Display', serif; font-size: 1.25rem; color: #B58C67; margin-bottom: 10px; line-height: 1.2;">
+                                        {{ menu_item.title }}
+                                    </h4>
+                                    <p
+                                        style="font-family: 'Lato', sans-serif; font-size: 0.85rem; line-height: 1.4; color: #ccc; margin-bottom: 15px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                                        {{ menu_item.subtitle or 'Experience our curated dining.' }}
+                                    </p>
+                                </div>
+
+                                <div class="mt-auto">
+                                    <a href="{{ url_for('menu_detail', slug=menu_item.slug) }}"
+                                        class="text-decoration-none"
+                                        style="font-family: 'Lato', sans-serif; font-size: 0.75rem; letter-spacing: 2px; color: #fff; border-bottom: 1px solid #B58C67; padding-bottom: 2px; transition: all 0.3s;"
+                                        onmouseover="this.style.color='#B58C67'" onmouseout="this.style.color='#fff'">
+                                        VIEW MENU
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#menusCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true" style="background-image: none;">
+                    <i class="fas fa-chevron-left" style="color: #B58C67; font-size: 2rem;"></i>
+                </span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#menusCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true" style="background-image: none;">
+                    <i class="fas fa-chevron-right" style="color: #B58C67; font-size: 2rem;"></i>
+                </span>
+                <span class="visually-hidden">Next</span>
+            </button>
+
+            <div class="carousel-indicators" style="position: relative; margin-top: 20px;">
+                {% for batch in all_menus|batch(3) %}
+                <button type="button" data-bs-target="#menusCarousel" data-bs-slide-to="{{ loop.index0 }}" {% if
+                    loop.first %}class="active" aria-current="true" {% endif %} aria-label="Slide {{ loop.index }}"
+                    style="background-color: #B58C67; width: 8px; height: 8px; border-radius: 50%; opacity: 1;"></button>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+</article>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const sections = document.querySelectorAll('.menu-section-container');
+        const navLinks = document.querySelectorAll('.category-link');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active-category');
+                if (link.getAttribute('data-target') === current) {
+                    link.classList.add('active-category');
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}
+{% include "footer.html" %}

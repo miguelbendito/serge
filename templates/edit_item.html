@@ -1,0 +1,50 @@
+{% extends "dashboard_layout.html" %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    <div class="card bg-base-100 shadow-xl">
+        <div class="card-body">
+            <h2 class="card-title text-2xl mb-4 text-center">{{ title }}</h2>
+
+            <form method="POST" action="" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+
+                <div class="form-control w-full mb-4">
+                    <label class="label"><span class="label-text font-bold">Item Name</span></label>
+                    {{ form.name(class="input input-bordered w-full") }}
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+
+                    <div class="form-control w-full">
+                        <label class="label"><span class="label-text font-bold">Order</span></label>
+                        {{ form.order(class="input input-bordered w-full") }}
+                    </div>
+                </div>
+
+                <div class="form-control w-full mb-4">
+                    <label class="label"><span class="label-text font-bold">Item Image (Optional)</span></label>
+                    {{ form.img_file(class="file-input file-input-bordered w-full") }}
+                    {% if form.img_file.errors %}
+                    {% for error in form.img_file.errors %}
+                    <span class="text-error text-sm mt-1">{{ error }}</span>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+
+                <div class="form-control w-full mb-6">
+                    <label class="label"><span class="label-text font-bold">Description</span></label>
+                    {{ form.description(class="textarea textarea-bordered h-24") }}
+                </div>
+
+                <div class="card-actions justify-end">
+                    <a href="{{ url_for('edit_menu', menu_id=section.menu_id) }}" class="btn btn-ghost">Cancel</a>
+                    {{ form.submit(class="btn btn-primary") }}
+                </div>
+            </form>
+            {{ ckeditor.load() }}
+            {{ ckeditor.config(name='description') }}
+        </div>
+    </div>
+</div>
+{% endblock %}

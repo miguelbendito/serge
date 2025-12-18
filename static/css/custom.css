@@ -1,25 +1,742 @@
+/* =========================================================
+   GLOBAL BUTTON / BADGE UTILITIES
+   ========================================================= */
+
 .btn-primary {
-    color: #fff;
-    font-weight: 600 !important;
+  color: #fff;
+  font-weight: 600 !important;
 }
 
 .menu {
-    font-size: 16px;
+  font-size: 16px;
+}
+
+.badge.badge-sm,
+.badge.badge-ghost {
+  font-weight: 600;
+  font-size: 14px;
+  padding: 15px 10px;
 }
 
 .badge.badge-sm {
-    background: var(--fallback-su, oklch(var(--su) / .13));
-    color: var(--fallback-su, oklch(var(--su)/var(--tw-bg-opacity)));
-    border: 1px solid var(--fallback-su, oklch(var(--su)/.13));
-    font-weight: 600;
-    font-size: 14px;
-    padding: 15px 10px;
+  background: var(--fallback-su, oklch(var(--su) / .13));
+  color: var(--fallback-su, oklch(var(--su)/var(--tw-bg-opacity)));
+  border: 1px solid var(--fallback-su, oklch(var(--su)/.13));
 }
 
 .badge.badge-ghost {
-    background: transparent;
-    color: var(--tw-text-opacity) var(--tw-text-color);
-    font-weight: 600;
-    font-size: 14px;
-    padding: 15px 10px;
+  background: transparent;
+  color: var(--tw-text-opacity) var(--tw-text-color);
+}
+
+
+/* =========================================================
+   HERO (HOMEPAGE)
+   ========================================================= */
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.55) 0%,
+    rgba(0, 0, 0, 0.25) 35%,
+    rgba(0, 0, 0, 0.05) 60%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  z-index: 1;
+}
+
+.masthead .container {
+  z-index: 2;
+}
+
+.masthead .site-heading h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 3.5vw, 3.1rem);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1.15;
+}
+
+.masthead .site-heading .subheading {
+  font-family: 'Lato', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 300;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-top: 1rem;
+  opacity: 0.85;
+}
+
+.custom-buttons a {
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+
+/* =========================================================
+   HEADER / NAVBAR
+   ========================================================= */
+
+/* Nav fade-in (controlled) */
+#mainNav {
+  opacity: 1;
+  transform: none;
+}
+
+/* Safe navbar transitions (scroll-compatible) */
+#mainNav {
+  transition: background-color 0.25s ease,
+              box-shadow 0.25s ease;
+}
+
+#mainNav.navbar-shrink {
+  background-color: rgba(0, 0, 0, 0.25);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+
+/* Brand */
+.brand-monogram {
+  font-family: 'Playfair Display', serif;
+  font-size: 0.95rem;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+}
+
+.brand-text {
+  font-family: 'Lato', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 300;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+/* Nav links */
+#mainNav .navbar-nav .nav-link {
+  font-family: 'Lato', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 300;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  position: relative;
+}
+
+/* Active nav indicator */
+#mainNav .navbar-nav .nav-link.active {
+  font-weight: 400;
+}
+
+#mainNav .navbar-nav .nav-link.active::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  width: 20px;
+  height: 1px;
+  background-color: currentColor;
+  transform: translateX(-50%);
+  opacity: 0.7;
+}
+
+/* Navbar toggler */
+.navbar-toggler {
+  border: none;
+}
+
+.navbar-toggler i {
+  font-size: 0.9rem;
+}
+
+
+/* =========================================================
+   HOME ICON → SR MORPH
+   ========================================================= */
+
+.nav-home-morph {
+  position: relative;
+  display: inline-block;
+  font-family: 'Playfair Display', serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+}
+
+.nav-home-morph::after {
+  content: 'SR';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.nav-home-morph i {
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.nav-home-morph:hover i,
+.nav-link.active .nav-home-morph i {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+
+.nav-home-morph:hover::after,
+.nav-link.active .nav-home-morph::after {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+footer .fa-stack,
+footer .fa-stack i {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+footer .fa-stack {
+  font-size: 0.75rem;
+}
+
+footer .fa-circle {
+  opacity: 0.15;
+}
+
+/* =========================================================
+   CONTACT PAGE
+   ========================================================= */
+
+.contact-section {
+  background-color: transparent;
+}
+
+/* Oval / fluid form container */
+.contact-form-wrapper {
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 24px;              /* soft rectangle */
+  padding: 3rem 3rem;               /* ensures full coverage */
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+}
+
+/* Make oval feel natural on mobile */
+@media (max-width: 768px) {
+  .contact-form-wrapper {
+    padding: 2rem 1.5rem;
+    border-radius: 18px;
+  }
+}
+
+/* Fluid input styling */
+.contact-form-wrapper .form-control {
+  border-radius: 999px;
+  padding: 0.85rem 1.4rem;
+  font-size: 0.85rem;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.contact-form-wrapper textarea.form-control {
+  border-radius: 1.5rem;
+  resize: none;
+}
+
+.contact-form-wrapper .form-control:focus {
+  border-color: rgba(0, 0, 0, 0.35);
+  box-shadow: none;
+}
+
+.contact-form-wrapper .btn-primary {
+  border-radius: 999px;
+  padding: 0.75rem 2.5rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   CONTACT FORM – FLOATING LABELS
+   ========================================================= */
+
+.contact-form-wrapper .form-floating > label {
+  font-family: 'Lato', sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.55);
+  padding-left: 1.4rem;
+  margin-bottom: 1.75rem;
+}
+
+.contact-form-wrapper .form-control {
+  border-radius: 999px;
+  padding: 1rem 1.4rem;
+  font-size: 0.85rem;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  border: 1px solid rgba(0, 0, 0, 0.18);
+}
+
+.contact-form-wrapper textarea.form-control {
+  border-radius: 1.5rem;
+}
+
+.contact-form-wrapper .form-control:focus {
+  border-color: rgba(0, 0, 0, 0.4);
+  box-shadow: none;
+}
+/* Contact success message */
+.contact-success {
+  text-align: center;
+  font-family: 'Lato', sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(0, 0, 0, 0.65);
+  margin-bottom: 2rem;
+}
+
+/* =========================================================
+   ABOUT PAGE
+   ========================================================= */
+
+.about-content-wrapper {
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 24px;
+  padding: 3.5rem 3rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+}
+
+@media (max-width: 768px) {
+  .about-content-wrapper {
+    padding: 2.25rem 1.5rem;
+    border-radius: 18px;
+  }
+}
+
+.about-block {
+  margin-bottom: 3rem;
+}
+
+.about-block:last-child {
+  margin-bottom: 0;
+}
+
+.about-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 1.25rem;
+}
+
+.about-content-wrapper p {
+  font-size: 0.95rem;
+  font-weight: 300;
+  line-height: 1.8;
+  margin-bottom: 1.25rem;
+}
+
+/* =========================================================
+   HERO OVERLAP (About & Contact)
+   ========================================================= */
+
+.overlap-hero {
+  margin-top: -140px;      /* pulls content into hero */
+  position: relative;
+  z-index: 3;
+}
+
+@media (max-width: 768px) {
+  .overlap-hero {
+    margin-top: -90px;
+  }
+}
+
+/* =========================================================
+   FULL-PAGE HERO BACKGROUNDS
+   ========================================================= */
+
+.page-hero-bg {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Contact background */
+.contact-hero-bg {
+  background-image: url('../assets/img/home-bg.jpg');
+}
+
+/* About background */
+.about-hero-bg {
+  background-image: url('../assets/img/about-bg.jpg');
+}
+
+.page-hero-bg {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+  min-height: 100vh;
+}
+
+.masthead {
+  background-size: cover;
+  background-position: center;
+}
+
+/* =========================================================
+   SERVICES PAGE
+   ========================================================= */
+
+.services-section {
+  background-color: transparent;
+}
+
+.services-content-wrapper {
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 24px;
+  padding: 3.5rem 3rem;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
+}
+
+@media (max-width: 768px) {
+  .services-content-wrapper {
+    padding: 2.25rem 1.5rem;
+    border-radius: 18px;
+  }
+}
+
+.services-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.05rem;
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin: 2.5rem 0 1.5rem;
+}
+
+.services-divider {
+  height: 1px;
+  background: rgba(0, 0, 0, 0.12);
+  margin: 3rem 0;
+}
+
+.services-list {
+  padding-left: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.services-list li {
+  font-size: 0.95rem;
+  font-weight: 300;
+  line-height: 1.8;
+  margin-bottom: 0.75rem;
+}
+
+/* =========================================================
+   MENUS PAGE
+   ========================================================= */
+
+.menus-section {
+  background-color: transparent;
+}
+
+/* Menu card */
+.menu-card {
+  display: block;
+  color: inherit;
+}
+
+.menu-card-image {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  padding-top: 66.6%;
+  margin-bottom: 1rem;
+}
+
+.menu-card-image img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.menu-card:hover .menu-card-image img {
+  transform: scale(1.05);
+}
+
+/* Menu title */
+.menu-card-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  display: inline-block;
+  padding-bottom: 4px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.6);
+}
+
+/* Fade-in animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-menu-card {
+  opacity: 0;
+  animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+/* =========================================================
+   CONTACT – MENU PREFERENCE (COMPACT)
+   ========================================================= */
+
+.contact-section-label {
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 1.25rem;
+  opacity: 0.7;
+}
+
+/* Grid */
+.menu-preference-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.75rem 1.25rem;
+}
+
+/* Individual item */
+.menu-preference-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 300;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Checkbox */
+.menu-preference-item input[type="checkbox"] {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  border-radius: 3px;
+  position: relative;
+}
+
+.menu-preference-item input[type="checkbox"]:checked {
+  background-color: rgba(0, 0, 0, 0.75);
+  border-color: rgba(0, 0, 0, 0.75);
+}
+
+.menu-preference-item input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  background: white;
+}
+
+/* Text */
+.menu-preference-item span {
+  letter-spacing: 0.04em;
+}
+
+/* =========================================================
+   MENU DETAIL PAGE
+   ========================================================= */
+
+.menu-detail-section {
+  background-color: #0e0e0e;
+  color: #fff;
+  padding-bottom: 6rem;
+}
+
+.menu-detail-frame {
+  background-color: #111;
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 4rem 3rem;
+  margin-top: 3rem;
+}
+
+.menu-section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+}
+
+.menu-section-subtitle {
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.menu-item-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+}
+
+.menu-item-desc {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* Sticky category nav */
+.menu-category-nav {
+  background: #000;
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 1rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.category-link {
+  font-size: 0.7rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #fff;
+  opacity: 0.6;
+  text-decoration: none;
+}
+
+.category-link:hover,
+.category-link.active-category {
+  opacity: 1;
+  color: #caa26a;
+}
+
+/* =========================================================
+   MENU DETAIL – CAROUSEL
+   ========================================================= */
+
+.menu-explore {
+  text-align: center;
+  margin-top: 5rem;
+}
+
+.menu-explore h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.6rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  margin-bottom: 2.5rem;
+}
+
+.menu-carousel-image {
+  width: 100%;
+  max-width: 420px;
+  height: 260px;
+  margin: 0 auto 1rem;
+  overflow: hidden;
+  border-radius: 14px;
+}
+
+.menu-carousel-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.menu-carousel-title {
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* Carousel arrows – final */
+.carousel-control-prev,
+.carousel-control-next {
+  width: 8%;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  width: 42px;
+  height: 42px;
+  background-size: 55%;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: 1px solid rgba(255,255,255,0.85);
+  border-radius: 50%;
+  background-color: rgba(0,0,0,0.35);
+  opacity: 0.9;
+}
+
+.carousel-control-prev-icon {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M11 1L3 8l8 7'/%3E%3C/svg%3E");
+}
+
+.carousel-control-next-icon {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='white' viewBox='0 0 16 16'%3E%3Cpath d='M5 1l8 7-8 7'/%3E%3C/svg%3E");
+}
+
+.carousel-control-prev-icon:hover,
+.carousel-control-next-icon:hover {
+  background-color: rgba(255,255,255,0.08);
+  opacity: 1;
+}
+
+/* =========================================================
+   MENU DETAIL – BACK LINK (REFINED)
+   ========================================================= */
+
+.menu-back-link {
+  margin-top: 2rem;
+}
+
+.menu-back-link a {
+  font-size: 0.65rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-weight: 300;
+  color: rgba(255,255,255,0.7);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+
+/* subtle arrow */
+.menu-back-link a::before {
+  content: '←';
+  font-size: 0.7rem;
+  opacity: 0.7;
+  transition: transform 0.25s ease;
+}
+
+.menu-back-link a:hover {
+  color: #fff;
+}
+
+.menu-back-link a:hover::before {
+  transform: translateX(-3px);
 }

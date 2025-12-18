@@ -1,12 +1,12 @@
         <!-- Footer-->
-        <footer class="border-top">
-          <div class="container px-4 px-lg-5">
+       <footer class="border-top-0 mt-0 pt-3 pb-3">
+          <div class="container px-4 px-lg-5 py-2">
               <div class="row gx-4 gx-lg-5 justify-content-center">
                   <div class="col-md-10 col-lg-8 col-xl-7">
                       <ul class="list-inline text-center">
                           <li class="list-inline-item">
                               <a href="#!">
-                                  <span class="fa-stack fa-lg">
+                                  <span class="fa-stack fa-sm">
                                       <i class="fas fa-circle fa-stack-2x"></i>
                                       <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
                                   </span>
@@ -14,7 +14,7 @@
                           </li>
                           <li class="list-inline-item">
                               <a href="#!">
-                                  <span class="fa-stack fa-lg">
+                                  <span class="fa-stack fa-sm">
                                       <i class="fas fa-circle fa-stack-2x"></i>
                                       <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
                                   </span>
@@ -22,14 +22,14 @@
                           </li>
                           <li class="list-inline-item">
                               <a target="_blank" href="https://www.instagram.com/sergeristivojevic/">
-                                  <span class="fa-stack fa-lg">
+                                  <span class="fa-stack fa-sm">
                                       <i class="fas fa-circle fa-stack-2x"></i>
                                       <i class="fab fa-instagram fa-stack-1x fa-inverse"></i>
                                   </span>
                               </a>
                           </li>
                       </ul>
-                      <div class="small text-center text-muted fst-italic">Copyright &copy; Summer Events Website 2025</div>
+                      <div class="small text-center text-muted fst-italic mt-1">Copyright &copy; Summer Events Website 2025</div>
                   </div>
               </div>
           </div>
@@ -40,3 +40,10 @@
       <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
   </body>
 </html>
+
+<script>
+  window.addEventListener('load', function () {
+    const nav = document.getElementById('mainNav');
+    if (nav) nav.classList.add('nav-ready');
+  });
+</script>

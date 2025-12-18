@@ -1,193 +1,133 @@
 {% include "header.html" %}
-<!-- Page Header-->
-<header class="masthead" style="background-image: url('../static/assets/img/contact-bg.jpg')">
-      <div class="container position-relative px-4 px-lg-5">
-            <div class="row gx-4 gx-lg-5 justify-content-center">
-                  <div class="col-md-10 col-lg-8 col-xl-7">
-                        <div class="page-heading">
-                              {% if msg_sent: %}
-                              <h1>
-                                    Successfully sent your message
-                              </h1>
-                              {% else: %}
-                              <h1>
-                                    Contact Me
-                              </h1>
-                              {% endif %}
-                              <span class="subheading">
-                                    Have questions? I have answers.
-                              </span>
-                        </div>
-                  </div>
-            </div>
+
+<!-- HERO -->
+
+<header
+  class="masthead min-vh-100 d-flex align-items-end position-relative"
+  style="background-image: url('../static/assets/img/home-bg.jpg')"
+>
+    <div class="hero-overlay"></div>
+
+    <div class="container position-relative px-4 px-lg-5 pb-5">
+      <div class="row">
+        <div class="col-md-8 col-lg-6">
+          <div class="site-heading text-start">
+            <h1>Contact</h1>
+            <span class="subheading">
+              Let’s create something unforgettable
+            </span>
+          </div>
+        </div>
       </div>
-</header>
+    </div>
+  </header>
+<br><br>
+<!-- CONTACT FORM -->
+<section class="contact-section overlap-hero">
+  <div class="container px-4 px-lg-5 py-5">
+    <div class="row justify-content-center">
+      <div class="col-md-10 col-lg-8">
+        <div class="contact-form-wrapper">
+          <form action="{{ url_for('contact') }}" method="post">
 
-<main class="mb-4">
-      <div class="container px-4 px-lg-5">
-            <div class="row gx-4 gx-lg-5 justify-content-center">
-                  <div class="col-md-10 col-lg-8 col-xl-7">
-                        <p>
-                              Want to get in touch? Fill out the form below to send me a message and
-                              I will get back to you as soon as possible!
-                        </p>
-                        <div class="my-5">
-                              <!-- * * * * * * * * * * * * * * *-->
-                              <!-- * * Simplified SB Contact Form for the Tutorial* *-->
-                              <form action="{{ url_for('contact') }}" id="contactForm" method="post" name="sentMessage">
-                                    <div class="form-floating">
-                                          <input class="form-control" id="name" name="name"
-                                                placeholder="Enter your name..." required="" type="text" />
-                                          <label for="name">
-                                                Name:
-                                          </label>
-                                    </div>
-                                    <link rel="stylesheet"
-                                          href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-                                    <div class="form-floating">
-                                          <input class="form-control" id="event_date" name="event_date"
-                                                placeholder="Select Date..." required="" type="text"
-                                                style="background-color: #fff;" />
-                                          <label for="event_date">
-                                                Date of event:
-                                          </label>
-                                    </div>
-                                    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-                                    <script>
-                                          document.addEventListener('DOMContentLoaded', function () {
-                                                flatpickr("#event_date", {
-                                                      dateFormat: "Y-m-d",
-                                                      minDate: "today"
-                                                });
-                                          });
-                                    </script>
-                                    <div class="form-floating">
-                                          <input class="form-control" id="email" name="email"
-                                                placeholder="Enter your email..." required="" type="email" />
-                                          <label for="email">
-                                                Email:
-                                          </label>
-                                    </div>
-                                    <div class="form-floating">
-                                          <input class="form-control" id="phone" name="phone"
-                                                placeholder="Enter your phone number..." required="" type="tel" />
-                                          <label for="phone">
-                                                Phone:
-                                          </label>
-                                    </div>
-                                    <div class="form-floating">
-                                          <input class="form-control" id="number_of_people" name="number_of_people"
-                                                placeholder="Number of People" required="" type="number" />
-                                          <label for="number_of_people">
-                                                Approximate guest count:
-                                          </label>
-                                    </div>
-                                    <div class="form-floating">
-                                          <input class="form-control" id="ocasion" name="ocassion"
-                                                placeholder="Occasion of the event..." required="" type="text" />
-                                          <label for="email">
-                                                Occasion:
-                                          </label>
-                                    </div>
-                                    <div class="form-floating">
-                                          <input class="form-control" id="allergies" name="allergies"
-                                                placeholder="Any allergies/diaterary res..." type="text" />
-                                          <label for="allergies">
-                                                Allergies/ dietary restrictions:
-                                          </label>
-                                    </div>
-                                    <div class="mb-4 mt-3">
-                                          <label class="form-label text-muted ms-1 small">Interested in Menus:</label>
-                                          <div class="row g-2">
-                                                {% for menu in menus %}
-                                                <div class="col-4 col-md-3">
-                                                      <input type="checkbox" class="btn-check" name="menus"
-                                                            id="menu_{{ menu.id }}" value="{{ menu.title }}"
-                                                            autocomplete="off">
-                                                      <label class="card h-100 border-0 shadow-sm cursor-pointer menu-selection-card is-hoverable"
-                                                            for="menu_{{ menu.id }}"
-                                                            style="cursor: pointer; overflow: hidden; border-radius: 6px;">
-                                                            <div class="position-relative" style="height: 90px;">
-                                                                  <img src="{{ menu.img_url or url_for('static', filename='assets/img/menus_bg.jpg') }}"
-                                                                        class="card-img-top w-100 h-100"
-                                                                        style="object-fit: cover; filter: brightness(0.6);"
-                                                                        alt="{{ menu.title }}">
-                                                                  <div
-                                                                        class="card-img-overlay d-flex align-items-center justify-content-center p-1 text-center">
-                                                                        <small class="text-white fw-bold"
-                                                                              style="text-shadow: 1px 1px 3px rgba(0,0,0,0.8); font-family: 'Playfair Display', serif; font-size: 0.75rem; line-height: 1.1;">{{
-                                                                              menu.title }}</small>
-                                                                  </div>
-                                                                  <div
-                                                                        class="check-indicator position-absolute top-0 end-0 m-1">
-                                                                        <div class="checkmark-circle">
-                                                                              <i class="fas fa-check"></i>
-                                                                        </div>
-                                                                  </div>
-                                                            </div>
-                                                      </label>
-                                                </div>
-                                                {% endfor %}
-                                          </div>
-                                          <style>
-                                                .menu-selection-card {
-                                                      transition: transform 0.2s, box-shadow 0.2s;
-                                                }
-
-                                                .menu-selection-card:hover {
-                                                      transform: translateY(-2px);
-                                                }
-
-                                                .btn-check:checked+.menu-selection-card {
-                                                      outline: 2px solid #B58C67;
-                                                      outline-offset: -2px;
-                                                }
-
-                                                .btn-check:checked+.menu-selection-card img {
-                                                      filter: brightness(0.4) sepia(0.6) hue-rotate(-30deg) saturate(1.8);
-                                                }
-
-                                                .check-indicator {
-                                                      opacity: 0;
-                                                      transform: scale(0.5);
-                                                      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                                                }
-
-                                                .checkmark-circle {
-                                                      width: 22px;
-                                                      height: 22px;
-                                                      background-color: #B58C67;
-                                                      border-radius: 50%;
-                                                      display: flex;
-                                                      align-items: center;
-                                                      justify-content: center;
-                                                      color: white;
-                                                      font-size: 10px;
-                                                      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-                                                }
-
-                                                .btn-check:checked+.menu-selection-card .check-indicator {
-                                                      opacity: 1;
-                                                      transform: scale(1);
-                                                }
-                                          </style>
-                                    </div>
-                                    <div class="form-floating">
-                                          <textarea class="form-control" id="message" name="message"
-                                                placeholder="Enter your message here..." required=""
-                                                style="height: 12rem"></textarea>
-                                          <label for="message">
-                                                Message:
-                                          </label>
-                                    </div>
-                                    <br />
-                                    <button class="btn btn-primary text-uppercase" id="submitButton" type="submit">
-                                          Send
-                                    </button>
-                              </form>
-                        </div>
-                  </div>
+            <!-- NAME -->
+            <div class="form-floating mb-4">
+              <input class="form-control" id="name" name="name" type="text" placeholder="Name" required>
+              <label for="name">Name</label>
             </div>
+
+            <!-- EVENT DATE -->
+            <div class="form-floating mb-4">
+              <input class="form-control" id="event_date" name="event_date"
+                     type="text" placeholder="Event Date" required>
+              <label for="event_date">Date of Event</label>
+            </div>
+
+            <!-- EMAIL -->
+            <div class="form-floating mb-4">
+              <input class="form-control" id="email" name="email" type="email"
+                     placeholder="Email" required>
+              <label for="email">Email</label>
+            </div>
+
+            <!-- PHONE -->
+            <div class="form-floating mb-4">
+              <input class="form-control" id="phone" name="phone" type="tel"
+                     placeholder="Phone" required>
+              <label for="phone">Phone</label>
+            </div>
+
+            <!-- GUEST COUNT -->
+            <div class="form-floating mb-4">
+              <input class="form-control" id="number_of_people" name="number_of_people"
+                     type="number" placeholder="Guests" required>
+              <label for="number_of_people">Approximate Guest Count</label>
+            </div>
+
+            <!-- OCCASION -->
+            <div class="form-floating mb-4">
+              <input class="form-control" id="occasion" name="ocassion"
+                     type="text" placeholder="Occasion" required>
+              <label for="occasion">Occasion</label>
+            </div>
+
+            <!-- ALLERGIES -->
+            <div class="form-floating mb-5">
+              <input class="form-control" id="allergies" name="allergies"
+                     type="text" placeholder="Allergies">
+              <label for="allergies">Allergies / Dietary Restrictions</label>
+            </div>
+
+            <!-- MENU PREFERENCE -->
+<div class="mb-5">
+  <p class="contact-section-label">
+    Interested Menus (optional)
+  </p>
+
+  <div class="menu-preference-grid">
+    {% for menu in menus %}
+      <label class="menu-preference-item">
+        <input
+          type="checkbox"
+          name="menus"
+          value="{{ menu.title }}"
+        >
+        <span>{{ menu.title }}</span>
+      </label>
+    {% endfor %}
+  </div>
+</div>
+
+            <!-- MESSAGE -->
+            <div class="form-floating mb-5">
+              <textarea class="form-control" id="message" name="message"
+                        placeholder="Message" style="height: 10rem" required></textarea>
+              <label for="message">Message</label>
+            </div>
+
+            <!-- SUBMIT -->
+            <div class="text-center">
+              <button class="btn btn-primary text-uppercase px-5" type="submit">
+                Send Message
+              </button>
+            </div>
+
+          </form>
+
+        </div>
+
       </div>
-</main>
+    </div>
+  </div>
+</section>
 {% include "footer.html" %}
+
+<!-- Flatpickr -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+  flatpickr("#event_date", {
+    dateFormat: "Y-m-d",
+    minDate: "today"
+  });
+</script>

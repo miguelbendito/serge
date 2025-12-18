@@ -1,79 +1,61 @@
 {% include "header.html" %}
-{% block content %}
-<header class="masthead" style="background-image: url('/static/assets/img/menus_bg.jpg');">
-    <div class="container position-relative px-4 px-lg-5">
-        <div class="row gx-4 gx-lg-5 justify-content-center">
-            <div class="col-md-10 col-lg-8 col-xl-7">
-                <div class="page-heading">
-                    <h1>Sample Menus</h1>
-                    <span class="subheading">Explore our curated selection of menus.</span>
-                </div>
-            </div>
+
+<!-- HERO -->
+<header
+  class="masthead min-vh-100 d-flex align-items-end position-relative"
+  style="background-image: url('/static/assets/img/menus_bg.jpg');"
+>
+  <div class="hero-overlay"></div>
+
+  <div class="container position-relative px-4 px-lg-5 pb-5">
+    <div class="row">
+      <div class="col-md-8 col-lg-6">
+        <div class="site-heading text-start">
+          <h1>Sample Menus</h1>
+          <span class="subheading">
+            Explore our curated selection of menus
+          </span>
         </div>
+      </div>
     </div>
+  </div>
 </header>
-<div class="container-fluid  py-5">
-    <div class="container">
-        <div class="row row-cols-1 row-cols-md-3 g-5">
-            {% for menu in menus %}
-            <div class="col animate-menu-card" style="animation-delay: {{ loop.index0 * 0.15 }}s;">
-                <div class="card h-100 bg-transparent border-0">
-                    <a href="{{ url_for('menu_detail', slug=menu.slug) }}" class="text-decoration-none">
-                        <div class="overflow-hidden rounded mb-3 position-relative" style="padding-top: 66.6%;">
-                            {% if menu.img_url %}
-                            <img src="{{ menu.img_url }}"
-                                class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover"
-                                alt="{{ menu.title }}">
-                            {% else %}
-                            <img src="https://dummyimage.com/600x400/333/fff.jpg&amp;text={{ menu.title|urlencode }}"
-                                class="position-absolute top-0 start-0 w-100 h-100 object-fit-cover"
-                                alt="{{ menu.title }}">
-                            {% endif %}
-                        </div>
-                        <h2 class="h4  hover-underline"
-                            style="font-family: 'Playfair Display', serif; border-bottom: 1px solid #000; display: inline-block; padding-bottom: 4px;">
-                            {{ menu.title }}
-                        </h2>
-                    </a>
-                </div>
-            </div>
+<br><br>
+<!-- MENUS GRID -->
+<section class="menus-section overlap-hero">
+  <div class="container px-4 px-lg-5 py-5">
+
+    <div class="row row-cols-1 row-cols-md-3 g-5">
+
+      {% for menu in menus %}
+      <div class="col animate-menu-card" style="animation-delay: {{ loop.index0 * 0.15 }}s;">
+        <a href="{{ url_for('menu_detail', slug=menu.slug) }}"
+           class="menu-card text-decoration-none">
+
+          <div class="menu-card-image">
+            {% if menu.img_url %}
+              <img src="{{ menu.img_url }}" alt="{{ menu.title }}">
             {% else %}
-            <div class="col-12 text-center text-white">
-                <p>No menus available at the moment.</p>
-            </div>
-            {% endfor %}
-        </div>
+              <img src="https://dummyimage.com/600x400/333/fff.jpg&text={{ menu.title|urlencode }}"
+                   alt="{{ menu.title }}">
+            {% endif %}
+          </div>
+
+          <h2 class="menu-card-title">
+            {{ menu.title }}
+          </h2>
+
+        </a>
+      </div>
+      {% else %}
+      <div class="col-12 text-center text-white">
+        <p>No menus available at the moment.</p>
+      </div>
+      {% endfor %}
+
     </div>
-</div>
 
-<style>
-    /* Ensure hover effect helps visibility */
-    .card:hover h2 {
-        opacity: 0.8;
-    }
+  </div>
+</section>
 
-    .object-fit-cover {
-        object-fit: cover;
-    }
-
-    /* Smooth FadeInUp Animation */
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translate3d(0, 40px, 0);
-        }
-
-        to {
-            opacity: 1;
-            transform: translate3d(0, 0, 0);
-        }
-    }
-
-    .animate-menu-card {
-        opacity: 0;
-        /* Important: Start invisible */
-        animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-    }
-</style>
-{% endblock %}
 {% include "footer.html" %}
